@@ -45,8 +45,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener  {
                 Toast.makeText(context, "Download Selesai", Toast.LENGTH_SHORT).show()
             }
         }
+
         val downloadIntentFilter = IntentFilter(ACTION_DOWNLOAD_STATUS)
-        registerReceiver(downloadReceiver, downloadIntentFilter)
+
+        // Pendaftaran Receiver dengan memeriksa versi SDK
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(downloadReceiver, downloadIntentFilter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(downloadReceiver, downloadIntentFilter)
+        }
     }
 
     var requestPermissionLauncher = registerForActivityResult(
@@ -71,7 +78,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener  {
                     },
                     3000
                 )
-
             }
         }
     }
